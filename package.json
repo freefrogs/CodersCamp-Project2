@@ -1,0 +1,19 @@
+{
+  "name": "project1",
+  "version": "1.0.0",
+  "description": "Landing page About Me",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test:html && npm run build:autoprefixer",
+    "test:html": "glob-run nu-html-checker index.html",
+    "build:autoprefixer": "autoprefixer-cli style.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer-cli": "^1.0.0",
+    "css-validator": "^0.9.0",
+    "glob-run": "^0.1.7",
+    "nu-html-checker": "^0.1.0"
+  }
+}
