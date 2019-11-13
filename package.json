@@ -4,8 +4,9 @@
   "description": "Landing page About Me",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test:html && npm run build:autoprefixer",
+    "test": "npm run test:html && npm run test:js && npm run build:autoprefixer",
     "test:html": "glob-run nu-html-checker index.html",
+    "test:js": "glob-run jslint js/*.js",
     "build:autoprefixer": "autoprefixer-cli style.css"
   },
   "author": "",
@@ -14,6 +15,7 @@
     "autoprefixer-cli": "^1.0.0",
     "css-validator": "^0.9.0",
     "glob-run": "^0.1.7",
+    "jslint": "^0.11.0",
     "nu-html-checker": "^0.1.0"
   }
 }
