@@ -11,6 +11,17 @@ document.addEventListener('DOMContentLoaded', function() {
         ['rgb(34,18,31)', 'rgb(80,7,89)', 'rgb(22,179,230)', 'rgb(84,222,225)', 'rgb(29,108,103)']
     ];
 
+    const patternsArray = [
+        'images/patterns/bear.png',
+        'images/patterns/cat.png',
+        'images/patterns/fox.png',
+        'images/patterns/lion.png',
+        'images/patterns/swan.png'
+    ]
+
+    // Random
+    const random = arr => Math.floor(Math.random()*arr.length);
+
     // Add color to button from data-color
     const  paletteButtons = document.querySelectorAll('.color');
 
@@ -26,8 +37,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hide instruction box
     const close = document.querySelector('.instructionBtn');
     const instructionBox = document.querySelector('aside');
-
     const closeInstruction = () => instructionBox.style.display = 'none';
-
     close.addEventListener('click', closeInstruction);
+
+    // Draw pattern
+    const patternBtn = document.querySelector('.pattern');
+    const getPattern = function() {
+        let index = random(patternsArray);
+        let pattern = patternsArray[index];
+        console.log(pattern);
+    }
+    patternBtn.addEventListener('click', getPattern);
+
+    // Draw palette
+    const paletteBtn = document.querySelector('.palette');
+    const getPalette = function() {
+        let index = random(paletteArray);
+        let palette = Array.from(paletteArray[index]);
+        
+        for (let i = 0; i < paletteButtons.length; i++) {
+            paletteButtons[i].dataset.color = palette[i];
+        };
+
+        addPalette();
+    };
+    paletteBtn.addEventListener('click', getPalette);
 });

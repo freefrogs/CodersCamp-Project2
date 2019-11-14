@@ -14,21 +14,21 @@
         <main>
             <nav>
                 <div class="lines">
-                    <button class="pattern"><img src="images/pattern.png" alt="random pattern"></button>
+                    <button class="pattern tooltip_box"><img src="images/pattern.png" alt="random pattern"><span class="tooltip">random pattern</span></button>
                     <div class="box">
-                        <button data-line="5" class="line"></button>
-                        <button data-line="10" class="line"></button>
-                        <button data-line="15" class="line"></button>
+                        <button data-line="5" class="line tooltip_box"><span class="tooltip">line thickness</span></button>
+                        <button data-line="10" class="line tooltip_box"><span class="tooltip">line thickness</span></button>
+                        <button data-line="15" class="line tooltip_box"><span class="tooltip">line thickness</span></button>
                     </div>
                 </div>
                 <div class="colors">
-                    <button class="random"><img src="images/color.png" alt="random palette"></button>
-                    <button data-color="rgb(246,172,13)" class="color"></button>
-                    <button data-color="rgb(243,232,3)" class="color"></button>
-                    <button data-color="rgb(4,193,225)" class="color"></button>
-                    <button data-color="rgb(117,228,222)" class="color"></button>
-                    <button data-color="rgb(214,235,179)" class="color"></button>
-                    <input type="color" class="user_color">
+                    <button class="palette tooltip_box"><img src="images/color.png" alt="random palette"><span class="tooltip">draw palette</span></button>
+                    <button data-color="rgb(246,172,13)" class="color tooltip_box"><span class="tooltip">line color</span></button>
+                    <button data-color="rgb(243,232,3)" class="color tooltip_box"><span class="tooltip">line color</span></button>
+                    <button data-color="rgb(4,193,225)"  class="color tooltip_box"><span class="tooltip">line color</span></button>
+                    <button data-color="rgb(117,228,222)" class="color tooltip_box"><span class="tooltip">line color</span></button>
+                    <button data-color="rgb(214,235,179)" class="color tooltip_box"><span class="tooltip">line color</span></button>
+                    <div class="tooltip_box tooltip_box_input"><input type="color" class="user_color tooltip_box" value="#ffffff"><span class="tooltip">color picker</span></div>
                 </div>
             </nav>
             <div class="drawing_canvas">
@@ -41,7 +41,7 @@
             <div class="instruction"><img src="images/instruction_btn/inctruction_colors.png" alt="palette colors buttons"><span>click on one of the buttons to choose a color from the palette</span></div>
             <div class="instruction"><img src="images/instruction_btn/instruction_user_color.png" alt="choose color button"><span>click to choose your own color</span></div>
             <div class="instruction"><img src="images/instruction_btn/instruction_lines.png" alt="lines buttons"><span>click on one of the buttons to choose line thickness</span></div>
-            <div class="instruction"><img src="images/instruction_btn/instruction_pattern.png" alt="random pattern button"><span>click the button to change a pattern</span></div>
+            <div class="instruction"><img src="images/instruction_btn/instruction_pattern.png" alt="random pattern button"><span>click the button to get random pattern</span></div>
         </aside>
         <footer>
             <p>Copyright 2019 ThinkTree <img src="images/logo_xs.png" alt="logo ThinkTree"></p>
