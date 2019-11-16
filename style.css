@@ -22,7 +22,7 @@ body {
 }
 
 main, footer {
-    max-width: 1600px;
+    max-width: 1200px;
     width: 90%;
     margin: 0 auto;
 }
@@ -44,6 +44,8 @@ nav {
         align-items: center;
     -ms-flex-pack: distribute;
         justify-content: space-around;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
 }
 
 .colors, .lines {
@@ -87,8 +89,12 @@ button {
     outline: none;
 }
 
-button:hover, input[type="color" i]:hover {
+button:hover, input[type="color"]:hover {
     box-shadow: 0 0 6px 1px var(--mainDark);
+}
+
+.checked {
+    box-shadow: 0 0 3px 1px rgb(245, 27, 34);
 }
 
 .pattern img, .palette img {
@@ -162,13 +168,33 @@ input[type="color"]::-webkit-color-swatch {
     background-image: radial-gradient(rgb(0,0,0) 8px, rgb(255,255,255) 8px);
 }
 
+/* --Canvas-- */
+.drawing_canvas {
+    max-width: 1200px;
+    min-height: 100vh;
+    position: relative;
+}
+
+.drawing_canvas canvas {
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+    width:90%;
+    height:90%;
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 1px dashed var(--mainDark);
+}
+
 /* --Instruction-- */
 aside {
     position: absolute;
     width: 80%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -10%);
+    transform: translate(-50%,-50%);
     padding: 1%;
     background-color: rgba(255,255,255,0.95);
     border-radius: 5px;
@@ -202,6 +228,51 @@ aside {
 /* --Footer-- */
 footer {
     margin-top: 2%;
+    margin-bottom: 1%;
     text-align: center;
     color: var(--mainLight);
+}
+
+/* --RWD-- */
+@media (max-width: 1000px) {
+    /* --Navigation-- */
+    .colors, .lines {
+        -ms-flex: 100%;
+            flex: 100%;
+    }
+
+    .tooltip_box_input .tooltip {
+        left: -90%;
+    }
+
+    .pattern .tooltip, .box .tooltip {
+        top: 15px;
+    }
+    
+    .pattern .tooltip, .palette .tooltip {
+        left: 0;
+    }
+
+    .box .tooltip:last-child {
+        left: -100px;
+    }
+}
+
+@media (max-width: 500px) {
+    /* --Instruction-- */
+    aside .resImg {
+        width: 95%;
+        height: auto;
+    }
+}
+
+@media (max-width: 280px) {
+    /* --Footer-- */
+    footer {
+        font-size: 12px;
+    }
+    footer img {
+        width: 20px;
+        height: auto;
+    }
 }

@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'images/patterns/fox.png',
         'images/patterns/lion.png',
         'images/patterns/swan.png'
-    ]
+    ];
 
     // Random
     const random = arr => Math.floor(Math.random()*arr.length);
@@ -30,9 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
             let bgColor = button.dataset.color;
             button.style.backgroundColor = bgColor;
         });
-    }
-
+    };
     addPalette();
+
+    // Remove checked from color buttons
+    const removeChecked = (arr) => arr.forEach(el => el.classList.remove('checked'));
 
     // Hide instruction box
     const close = document.querySelector('.instructionBtn');
@@ -41,13 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
     close.addEventListener('click', closeInstruction);
 
     // Draw pattern
-    const patternBtn = document.querySelector('.pattern');
     const getPattern = function() {
         let index = random(patternsArray);
         let pattern = patternsArray[index];
-        console.log(pattern);
-    }
-    patternBtn.addEventListener('click', getPattern);
+        return pattern;
+    };
 
     // Draw palette
     const paletteBtn = document.querySelector('.palette');
@@ -58,8 +58,171 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < paletteButtons.length; i++) {
             paletteButtons[i].dataset.color = palette[i];
         };
-
+        removeChecked([...paletteButtons]);
         addPalette();
     };
     paletteBtn.addEventListener('click', getPalette);
+
+    // Canvas
+    const canvasBox = document.querySelector('.drawing_canvas');
+
+    class Drawing {
+        constructor(pattern) {
+            this.img = new Image();
+            this.img.addEventListener('load', () => {
+                this.createCanvas();
+                this.canDraw = false;
+                this.lastX = 0;
+                this.lastY = 0;
+                this.setInitialDrawValue();
+                this.setControls();
+                this.bindControls();
+            });
+            this.img.src = 'images/patterns/transparent.png';
+            this.pattern = pattern
+        }
+
+        createCanvas() {
+            this.canvas = document.createElement('canvas');
+            this.canvas.style.backgroundImage = `url(${this.pattern})`;
+            this.canvas.width = canvasBox.offsetWidth;
+            // I don't know why canvasBox.offsetWidth = 0, check letter
+            this.canvas.height = document.documentElement.clientHeight;
+            //console.log(this.canvas.width, this.canvas.height);
+            canvasBox.appendChild(this.canvas);
+            this.ctx = this.canvas.getContext('2d');
+        }
+
+        setInitialDrawValue() {
+            // Set pattern
+            this.ctx.drawImage(this.img, 0, 0)
+            // Initial drawing settings
+            this.ctx.lineWidth = 5;
+            this.ctx.lineJoin = 'round';
+            this.ctx.lineCap = 'round';
+            this.ctx.strokeStyle = 'rgb(246,172,13)';
+        }
+
+        setControls() {
+            // Buttons - line thickness 
+            this.bntsLine = [...document.querySelectorAll('.line')];
+            this.bntsLine[0].classList.add('checked');
+            // Buttons - line color
+            this.btnsColor = [...document.querySelectorAll('.color')];
+            this.btnsColor[0].classList.add('checked');
+            this.colorPicker = document.querySelector('.user_color');
+         }
+
+        bindControls() {
+            // Controls
+            this.colorPicker.addEventListener('change', this.setColor1.bind(this));
+            this.btnsColor.forEach(btn => btn.addEventListener('click', this.setColor2.bind(this)));
+            this.bntsLine.forEach(btn => btn.addEventListener('click', this.setThickness.bind(this)));
+            // Canvas with mouse
+            this.canvas.addEventListener('mousemove', this.draw.bind(this));
+            this.canvas.addEventListener('mousedown', this.startDraw.bind(this));
+            this.canvas.addEventListener('mouseup', this.stopDraw.bind(this));
+            this.canvas.addEventListener('mouseout', this.stopDraw.bind(this));
+            // Add checked to current color & thickness button
+            this.addChecked(this.bntsLine);
+            this.addChecked(this.btnsColor);
+        }
+
+        addChecked(arr) {
+            for (const btn of arr) {
+                btn.addEventListener('click', (e) => {
+                    e.currentTarget.classList.add('checked');
+
+                    for (const el of arr) {
+                        if (el !== e.currentTarget) {
+                            el.classList.remove('checked');
+                        }
+                    };
+                });
+            };
+        }
+
+        // Set line color with color picker
+        setColor1(e) {
+            this.ctx.strokeStyle = e.target.value;
+        }
+
+        // Set line color with palette button
+        setColor2(e) {
+            this.ctx.strokeStyle = e.target.dataset.color;
+        }
+
+        // Set line thickness
+        setThickness(e) {
+            this.ctx.lineWidth = e.target.dataset.line;
+        }
+
+        // Start drawing
+        startDraw(e) {
+            this.canDraw = true;
+            const position = this.getMousePosition(e);
+            [this.lastX, this.lastY] = [position.x, position.y];
+            //console.log(e, this.lastX, this.lastY);
+        }
+
+        // Stop drawing
+        stopDraw() {
+            this.canDraw = false;
+        }
+
+        // Drawing
+        draw(e) {
+            if (!this.canDraw) return;
+            const position = this.getMousePosition(e);
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.lastX, this.lastY);
+            this.ctx.lineTo(position.x, position.y);
+            this.ctx.stroke();
+            [this.lastX, this.lastY] = [position.x, position.y];
+        }
+
+        getMousePosition(e) {
+            const X = e.pageX - this.getElementPosition(this.canvas).left;
+            const Y = e.pageY - this.getElementPosition(this.canvas).top;
+            return {
+                x: X,
+                y: Y
+            };
+        }
+
+        getElementPosition(obj) {
+            let top = 0;
+            let left = 0;
+            while (obj && obj.tagName != 'BODY') {
+                top += 0.25*obj.offsetTop;
+                left += 0.12*obj.offsetLeft;
+                obj = obj.offsetParent;
+            }
+            return {
+                top: top,
+                left: left
+            };
+        }
+    };
+
+    // Add first canvas
+    const drawing = new Drawing(getPattern());
+
+    // Clear Canvas, get new pattern
+    const patternBtn = document.querySelector('.pattern');
+    const newPattern = function() {
+        // Add iniltial settings
+        removeChecked([...document.querySelectorAll('.line')]);
+        removeChecked([...paletteButtons]);
+        for (let i = 0; i < [...paletteButtons].length; i++) {
+            [...paletteButtons][i].dataset.color = paletteArray[3][i];
+        };
+        addPalette();
+        // Delete old canvas
+        let oldCanvas = document.querySelector('canvas');
+        canvasBox.removeChild(oldCanvas);
+        // Add new canvas
+        const drawing = new Drawing(getPattern());
+    };
+    patternBtn.addEventListener('click', newPattern);
 });
