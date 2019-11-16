@@ -15,13 +15,13 @@ Project is created with:
 * HTML
 
 ## Instruction
-![Drawing instruction](https://github.com/freefrogs/CodersCamp-Project2/tree/master/images/instruction.png)
+![Drawing instruction](https://github.com/freefrogs/CodersCamp-Project2/blob/master/images/instruction.png)
 
 ## Status: in progress
 
 ## To improve
-- [] Brush positioning relative to the mouse cursor position and different view port size.
-- [] Touch events for mobile devices.
+1. Brush positioning relative to the mouse cursor position and different view port size.
+2. Touch events for mobile devices.
 
 
 
