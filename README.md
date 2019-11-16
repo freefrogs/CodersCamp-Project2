@@ -10,7 +10,7 @@ Additionally checking Canvas possibilities.
 
 ## Technologies
 Project is created with:
-* JS
+* JavaScript
 * CSS
 * HTML
 
@@ -20,8 +20,15 @@ Project is created with:
 ## Status: in progress
 
 ## To improve
-1. Brush positioning relative to the mouse cursor position and different view port size.
-2. Touch events for mobile devices.
+1. Brush positioning relative to the mouse cursor position and different screen size. => **DONE**
+2. Touch events for mobile devices. => **DONE**
+3. Scaling canvas image during changing view size.
+4. Scrolling preventing during drawing on mobile devices.
+
+## Sources
+* [Canvas - tworzymy Painta](https://kursjs.pl/kurs/canvas/canvas-paint.php),
+* [Let's build something fun with HTML5 Canvas](https://www.youtube.com/watch?v=8ZGAzJ0drl0),
+* [Using Touch Events with the HTML5 Canvas](http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html).
 
 
 

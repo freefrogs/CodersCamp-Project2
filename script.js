@@ -88,7 +88,6 @@ document.addEventListener('DOMContentLoaded', function() {
             this.canvas.width = canvasBox.offsetWidth;
             // I don't know why canvasBox.offsetWidth = 0, check letter
             this.canvas.height = document.documentElement.clientHeight;
-            //console.log(this.canvas.width, this.canvas.height);
             canvasBox.appendChild(this.canvas);
             this.ctx = this.canvas.getContext('2d');
         }
@@ -123,6 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
             this.canvas.addEventListener('mousedown', this.startDraw.bind(this));
             this.canvas.addEventListener('mouseup', this.stopDraw.bind(this));
             this.canvas.addEventListener('mouseout', this.stopDraw.bind(this));
+            // Canvas with mouse
+            this.canvas.addEventListener("touchmove", this.touch.bind(this));
+            this.canvas.addEventListener("touchstart", this.startTouch.bind(this));
+            this.canvas.addEventListener("touchend", this.stopTouch.bind(this));
             // Add checked to current color & thickness button
             this.addChecked(this.bntsLine);
             this.addChecked(this.btnsColor);
@@ -132,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function() {
             for (const btn of arr) {
                 btn.addEventListener('click', (e) => {
                     e.currentTarget.classList.add('checked');
-
                     for (const el of arr) {
                         if (el !== e.currentTarget) {
                             el.classList.remove('checked');
@@ -157,23 +159,55 @@ document.addEventListener('DOMContentLoaded', function() {
             this.ctx.lineWidth = e.target.dataset.line;
         }
 
-        // Start drawing
+        // Preventing scrolling on document.body if the target of a touch event is the canvas
+        scrollingPrevent(e) {
+            if (e.target == this.canvas) {
+                e.preventDefault();
+            }
+        }
+
+        // Start drawing with mouse
         startDraw(e) {
             this.canDraw = true;
             const position = this.getMousePosition(e);
             [this.lastX, this.lastY] = [position.x, position.y];
-            //console.log(e, this.lastX, this.lastY);
         }
 
-        // Stop drawing
+        // Start drawing with touch
+        startTouch(e) {
+            this.scrollingPrevent(e);
+            this.canDraw = true;
+            const position = this.getTouchPosition(e);
+            [this.lastX, this.lastY] = [position.x, position.y];           
+        }
+
+        // Stop drawing with mouse
         stopDraw() {
             this.canDraw = false;
         }
 
-        // Drawing
+        // Stop drawing with touch
+        stopTouch(e) {
+            this.scrollingPrevent(e);
+            this.stopDraw();
+        }
+
+        // Drawing with mouse
         draw(e) {
             if (!this.canDraw) return;
             const position = this.getMousePosition(e);
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.lastX, this.lastY);
+            this.ctx.lineTo(position.x, position.y);
+            this.ctx.stroke();
+            [this.lastX, this.lastY] = [position.x, position.y];
+        }
+
+        // Drawing with touch
+        touch(e) {
+            this.scrollingPrevent(e);
+            if (!this.canDraw) return;
+            const position = this.getTouchPosition(e);
             this.ctx.beginPath();
             this.ctx.moveTo(this.lastX, this.lastY);
             this.ctx.lineTo(position.x, position.y);
@@ -191,6 +225,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 x: X,
                 y: Y
             };
+        }
+
+        getTouchPosition(e) {
+            const rect = this.canvas.getBoundingClientRect();
+            const scaleX = this.canvas.width / rect.width;
+            const scaleY = this.canvas.height / rect.height;
+            const X = (e.touches[0].clientX - rect.left)*scaleX;
+            const Y = (e.touches[0].clientY - rect.top)*scaleY;
+            return {
+                x: X,
+                y: Y
+            }
         }
     };
 
