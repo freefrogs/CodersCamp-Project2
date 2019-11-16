@@ -182,25 +182,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         getMousePosition(e) {
-            const X = e.pageX - this.getElementPosition(this.canvas).left;
-            const Y = e.pageY - this.getElementPosition(this.canvas).top;
+            const rect = this.canvas.getBoundingClientRect();
+            const scaleX = this.canvas.width / rect.width;
+            const scaleY = this.canvas.height / rect.height;
+            const X = (e.clientX - rect.left)*scaleX;
+            const Y = (e.clientY - rect.top)*scaleY;
             return {
                 x: X,
                 y: Y
-            };
-        }
-
-        getElementPosition(obj) {
-            let top = 0;
-            let left = 0;
-            while (obj && obj.tagName != 'BODY') {
-                top += 0.25*obj.offsetTop;
-                left += 0.12*obj.offsetLeft;
-                obj = obj.offsetParent;
-            }
-            return {
-                top: top,
-                left: left
             };
         }
     };
